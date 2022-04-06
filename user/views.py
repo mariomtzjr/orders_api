@@ -16,7 +16,7 @@ class OperatorListView(generics.ListAPIView):
         # Note the use of `get_queryset()` instead of `self.queryset`
         queryset = self.get_queryset()
         serializer = OperatorSerializer(queryset, many=True)
-        print("Serializer: ", serializer)
+        
         return Response(serializer.data)
 
 
@@ -27,7 +27,7 @@ class OperatorCreateView(generics.CreateAPIView):
     def post(self, request):
         serializer = OperatorSerializer(data=request.data)
         if serializer.is_valid():
-            operator = serializer.save()
+            serializer.save()
 
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
@@ -38,9 +38,31 @@ class OperatorDetailView(generics.RetrieveAPIView):
     serializer_class = OperatorSerializer
 
     def get(self, request, pk):
-        operator = self.get_object()
+        try:
+            operator = Operator.objects.get(pk=pk)
+            if not operator:
+                return Response({"error": f"Operator with id={pk} not found"}, status=404)
+        except:
+            operator = Operator.objects.get(employee_number=pk)
+            if not operator:
+                return Response({"error": f"Operator with employee_number={pk} not found"}, status=404)
+
         serializer = OperatorSerializer(operator)
         return Response(serializer.data)
+
+
+
+class ComensalCreateView(generics.CreateAPIView):
+    queryset = Comensal.objects.all()
+    serializer_class = ComensalSerializer
+
+    def post(self, request):
+        serializer = ComensalSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 
 class ComensalDetailView(generics.RetrieveAPIView):
@@ -48,6 +70,12 @@ class ComensalDetailView(generics.RetrieveAPIView):
     serializer_class = OperatorSerializer
 
     def get(self, request, pk):
-        comensal = self.get_object()
+        try:
+            comensal = Comensal.objects.get(pk=pk)
+            if not comensal:
+                return Response({"error": f"Comensal with id={pk} not found"}, status=404)
+        except:
+            return Response({"error": f"Comensal not found"}, status=404)
+            
         serializer = ComensalSerializer(comensal)
         return Response(serializer.data)

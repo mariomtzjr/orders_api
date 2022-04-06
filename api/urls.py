@@ -6,9 +6,11 @@ from user.views import (
     OperatorListView,
     OperatorCreateView,
     OperatorDetailView,
+    ComensalCreateView,
     ComensalDetailView,
     )
 from product.views import ProductListView, ProductCreateView, ProductDetailView
+
 
 urlpatterns = [
     # Orders
@@ -21,6 +23,7 @@ urlpatterns = [
     path('operators/create/', OperatorCreateView.as_view(), name='operator-create'),
 
     # Comensales
+    path('comensales/create/', ComensalCreateView.as_view(), name='comensal-create'),
     path('comensales/<int:pk>', ComensalDetailView.as_view(), name='comensal-detail'),
 
     # Products

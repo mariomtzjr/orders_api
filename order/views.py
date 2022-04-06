@@ -5,10 +5,12 @@ from rest_framework.response import Response
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Order, OrderItem
-from .serializers import OrderSerializer, OrderSerializerOutput
+from order.models import Order, OrderItem
+from order.serializers import OrderSerializer, OrderSerializerOutput
+from user.serializers import ComensalSerializer, OperatorSerializer
 from user.models import Comensal, Operator
 from product.models import Product
+from order.utils import parse_orders
 
 
 # Create your views here.
@@ -20,9 +22,11 @@ class OrderListView(generics.ListAPIView):
     def get(self, request):
         query_params = self.request.query_params
         queryset = self.get_queryset()
-        serializer = OrderSerializer(queryset, many=True)
         
-        return Response(serializer.data)
+        orders = parse_orders(queryset)
+        # serializer = OrderSerializer(queryset, many=True)
+        
+        return Response(orders)
 
 
 class OrderCreateView(generics.CreateAPIView):
@@ -55,7 +59,7 @@ class OrderCreateView(generics.CreateAPIView):
             else:
                 prod = Product.objects.filter(name__exact=product.get('name')).first()
                 product['product'] = prod.id
-
+            product['quantity'] = product.get('quantity')
         if serializer.is_valid():
             order =  serializer.save()
             data_response = OrderSerializerOutput(order).data

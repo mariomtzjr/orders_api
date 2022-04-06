@@ -1,0 +1,375 @@
+openapi: 3.0.3
+info:
+  title: Your Project API
+  version: 1.0.0
+  description: Your project description
+paths:
+  /api/v1/comensales/{id}:
+    get:
+      operationId: comensales_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - comensales
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operator'
+          description: ''
+  /api/v1/comensales/create/:
+    post:
+      operationId: comensales_create_create
+      tags:
+      - comensales
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comensal'
+            examples:
+              ValidExamplePorComensalCreation:
+                value:
+                  table_number: 1
+                  first_name: Juan
+                  last_name: Alvarez
+                summary: Creation of an Comensal
+                description: Creation of an Comensal
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Comensal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Comensal'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comensal'
+          description: ''
+  /api/v1/operators/:
+    get:
+      operationId: operators_list
+      tags:
+      - operators
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Operator'
+          description: ''
+  /api/v1/operators/{id}:
+    get:
+      operationId: operators_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - operators
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operator'
+          description: ''
+  /api/v1/operators/create/:
+    post:
+      operationId: operators_create_create
+      tags:
+      - operators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Operator'
+            examples:
+              ValidExamplePorOperatorCreation:
+                value:
+                  employee_number: 10012
+                  first_name: Eduardo
+                  last_name: Martinez
+                  email: ''
+                summary: Creation of an Operator
+                description: Creation of an Operator
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Operator'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Operator'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operator'
+          description: ''
+  /api/v1/orders/:
+    get:
+      operationId: orders_list
+      tags:
+      - orders
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+          description: ''
+  /api/v1/orders/create/:
+    post:
+      operationId: orders_create_create
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/v1/products/:
+    get:
+      operationId: products_list
+      tags:
+      - products
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          description: ''
+  /api/v1/products/{id}:
+    get:
+      operationId: products_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - products
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/v1/products/create/:
+    post:
+      operationId: products_create_create
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+components:
+  schemas:
+    Comensal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        table_number:
+          type: integer
+          nullable: true
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 200
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 200
+      required:
+      - id
+    Operator:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        employee_number:
+          type: integer
+        first_name:
+          type: string
+          maxLength: 200
+        last_name:
+          type: string
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 100
+      required:
+      - first_name
+      - id
+      - last_name
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        operador:
+          type: integer
+        comensal:
+          type: integer
+          nullable: true
+        order_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        grand_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,18}(?:\.\d{0,2})?$
+        date:
+          type: string
+          format: date
+      required:
+      - id
+      - operador
+      - order_items
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          type: integer
+        order:
+          type: integer
+          nullable: true
+        qty:
+          type: integer
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,18}(?:\.\d{0,2})?$
+        total_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,18}(?:\.\d{0,2})?$
+      required:
+      - id
+      - product
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        quantity:
+          type: integer
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+      required:
+      - id
+      - name
+      - quantity
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
