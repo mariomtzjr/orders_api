@@ -18,7 +18,7 @@ def parse_orders(queryset):
             product_data["name"] = product.__str__()
             product_data["quantity"] = order_item.qty
             product_data["unit_price"] = order_item.unit_price
-            product_data["total"] = order_item.total_price
+            product_data["total"] = order_item.qty * order_item.unit_price
             products.append(product_data)
             product_data = {}
         products = []
