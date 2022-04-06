@@ -31,3 +31,14 @@ class ProductCreateView(generics.CreateAPIView):
 
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+
+class ProductDetailView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get(self, request, pk):
+        product = self.get_object()
+        serializer = ProductSerializer(product)
+
+        return Response(serializer.data)

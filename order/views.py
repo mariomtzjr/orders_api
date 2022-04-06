@@ -9,7 +9,6 @@ from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderSerializerOutput
 from user.models import Comensal, Operator
 from product.models import Product
-from .filters import OrderFilter
 
 
 # Create your views here.
@@ -17,7 +16,6 @@ class OrderListView(generics.ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_class = OrderFilter
 
     def get(self, request):
         query_params = self.request.query_params

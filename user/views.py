@@ -3,8 +3,8 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
 
-from .serializers import OperatorSerializer
-from .models import Operator
+from .serializers import OperatorSerializer, ComensalSerializer
+from .models import Operator, Comensal
 
 
 # Create your views here.
@@ -31,3 +31,23 @@ class OperatorCreateView(generics.CreateAPIView):
 
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+
+class OperatorDetailView(generics.RetrieveAPIView):
+    queryset = Operator.objects.all()
+    serializer_class = OperatorSerializer
+
+    def get(self, request, pk):
+        operator = self.get_object()
+        serializer = OperatorSerializer(operator)
+        return Response(serializer.data)
+
+
+class ComensalDetailView(generics.RetrieveAPIView):
+    queryset = Comensal.objects.all()
+    serializer_class = OperatorSerializer
+
+    def get(self, request, pk):
+        comensal = self.get_object()
+        serializer = ComensalSerializer(comensal)
+        return Response(serializer.data)
