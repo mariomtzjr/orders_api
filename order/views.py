@@ -35,7 +35,9 @@ class OrderCreateView(generics.CreateAPIView):
         serializer = OrderSerializer(data=request.data)
 
         operador = serializer.initial_data['operador']
-        operador, created_ = Operator.objects.get_or_create(employee_number=operador)
+        operador, created_ = Operator.objects.get_or_create(**operador)
+
+        serializer.initial_data['operador'] = operador.id
 
         comensal_data = serializer.initial_data.get("comensal")
         comensal, created = Comensal.objects.get_or_create(**comensal_data)
@@ -49,7 +51,7 @@ class OrderCreateView(generics.CreateAPIView):
                 obj = Product.objects.create(
                     name=product.get('name'),
                     unit_price=product.get('unit_price'),
-                    quantity=product.get('qty')
+                    quantity=product.get('quantity')
                 )
                 product['product'] = obj.id
             else:
@@ -58,12 +60,10 @@ class OrderCreateView(generics.CreateAPIView):
 
         if serializer.is_valid():
             order =  serializer.save()
-            
-            print("Order: ", order)
-            print("Order id: ", order.id)
-            print("Order items: ", order.order_items.all())
             data_response = OrderSerializerOutput(order).data
-            print("data_response: ", data_response)
+            data_response["operador"] = operador.__str__()
+            data_response["comensal"] = comensal.__str__()
+            
             order_items_processed = [{
                 'id': item.id,
                 'product': item.product.name,

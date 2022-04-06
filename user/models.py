@@ -26,4 +26,4 @@ class Comensal(models.Model):
         verbose_name_plural = 'Comensales'
     
     def __str__(self):
-        return f"{self.first_name} {self.last_name} {(self.table_number)}"
+        return f"{self.first_name} {self.last_name}"
