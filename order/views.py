@@ -3,7 +3,6 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
 
-from django_filters.rest_framework import DjangoFilterBackend
 
 from order.models import Order, OrderItem
 from order.serializers import OrderSerializer, OrderSerializerOutput
@@ -17,7 +16,6 @@ from order.utils import parse_orders
 class OrderListView(generics.ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    filter_backends = [DjangoFilterBackend]
 
     def get(self, request):
         query_params = self.request.query_params
@@ -60,6 +58,7 @@ class OrderCreateView(generics.CreateAPIView):
                 prod = Product.objects.filter(name__exact=product.get('name')).first()
                 product['product'] = prod.id
             product['quantity'] = product.get('quantity')
+        
         if serializer.is_valid():
             order =  serializer.save()
             data_response = OrderSerializerOutput(order).data

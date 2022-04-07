@@ -19,36 +19,25 @@ class Order(models.Model):
     total = models.DecimalField(default=0.00, decimal_places=2, max_digits=20)
     discount = models.DecimalField(default=0.00, decimal_places=2, max_digits=20)
     grand_total = models.DecimalField(default=0.00, decimal_places=2, max_digits=20)
-    is_paid = models.BooleanField(default=True)
+    is_paid = models.BooleanField(default=False)
 
     ordered_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-ordered_at']
+    
+    def __str__(self):
+        return f"Order - {self.id}"
 
     def save(self, *args, **kwargs):
         order_items = self.order_items.all()
 
         self.total = order_items.aggregate(Sum('total_price'))['total_price__sum'] if order_items.exists() else 0.00
         self.grand_total = Decimal(self.total) - Decimal(self.discount)
+        self.title = f"Order: {self.id}"
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.title if self.title else f"Order - {self.id}"
-
-    @staticmethod
-    def filter_data(request, queryset):
-        search_name = request.GET.get('search_name', None)
-        date_start = request.GET.get('date_start', None)
-        date_end = request.GET.get('date_end', None)
-        queryset = queryset.filter(title__contains=search_name) if search_name else queryset
-        if date_end and date_start and date_end >= date_start:
-            date_start = datetime.datetime.strptime(date_start, '%m/%d/%Y').strftime('%Y-%m-%d')
-            date_end = datetime.datetime.strptime(date_end, '%m/%d/%Y').strftime('%Y-%m-%d')
-            print(date_start, date_end)
-            queryset = queryset.filter(date__range=[date_start, date_end])
-        return queryset
 
 
 class OrderItem(models.Model):
